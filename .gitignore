@@ -1,0 +1,22 @@
+# Secrets and local environment
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+
+# Dependencies and generated output
+node_modules/
+frontend/node_modules/
+frontend/dist/
+backend/target/
+coverage/
+*.log
+.DS_Store
+
+# Local uploads and IDE state
+uploads/
+backend/uploads/
+.vscode/
+.idea/

@@ -1,0 +1,26 @@
+CYBERSHIELD - START HERE
+
+1. Install MySQL and create database:
+   mysql -u root -p < database/schema.sql
+
+2. In backend/src/main/resources/application.properties set:
+   spring.datasource.username=YOUR_MYSQL_USER
+   spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+3. Start backend:
+   cd backend
+   mvn spring-boot:run
+
+4. Start frontend in another terminal:
+   cd frontend
+   npm install
+   npm run dev
+
+5. Open http://localhost:5173
+
+Demo:
+admin@cybershield.local / Admin@123
+analyst@cybershield.local / Analyst@123
+user@cybershield.local / User@123
+
+IMPORTANT: The CSV report endpoint is protected by JWT. If your browser blocks direct download because the Authorization header cannot be attached to a normal link, use an API client or modify Reports.jsx to fetch the file with the bearer token. The rest of the application uses the API helper and is authenticated.

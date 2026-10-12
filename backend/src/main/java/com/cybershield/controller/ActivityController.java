@@ -1,0 +1,2 @@
+package com.cybershield.controller; import com.cybershield.repository.*; import org.springframework.web.bind.annotation.*; import org.springframework.security.access.prepost.PreAuthorize;
+@RestController @RequestMapping("/api/activity") public class ActivityController { final ActivityLogRepository r; public ActivityController(ActivityLogRepository r){this.r=r;} @GetMapping @PreAuthorize("hasRole('ADMIN')") public Object all(){return r.findTop50ByOrderByCreatedAtDesc();} }

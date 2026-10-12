@@ -1,0 +1,76 @@
+CREATE DATABASE IF NOT EXISTS cybershield CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE cybershield;
+
+CREATE TABLE IF NOT EXISTS users (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ name VARCHAR(120) NOT NULL,
+ email VARCHAR(180) NOT NULL UNIQUE,
+ password VARCHAR(255) NOT NULL,
+ role ENUM('ADMIN','ANALYST','USER') NOT NULL DEFAULT 'USER',
+ active BOOLEAN NOT NULL DEFAULT TRUE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS incidents (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ title VARCHAR(220) NOT NULL,
+ incident_type VARCHAR(80) NOT NULL,
+ severity VARCHAR(30) NOT NULL,
+ priority VARCHAR(30) NOT NULL,
+ status VARCHAR(40) NOT NULL,
+ affected_system VARCHAR(220),
+ affected_users VARCHAR(500),
+ description TEXT NOT NULL,
+ detected_at DATETIME NOT NULL,
+ resolved_at DATETIME NULL,
+ reporter_id BIGINT NOT NULL,
+ assignee_id BIGINT NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ CONSTRAINT fk_incident_reporter FOREIGN KEY (reporter_id) REFERENCES users(id),
+ CONSTRAINT fk_incident_assignee FOREIGN KEY (assignee_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS evidence (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ incident_id BIGINT NOT NULL,
+ original_name VARCHAR(255) NOT NULL,
+ stored_name VARCHAR(255) NOT NULL,
+ content_type VARCHAR(120),
+ size_bytes BIGINT,
+ uploaded_by BIGINT NOT NULL,
+ uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_evidence_incident FOREIGN KEY (incident_id) REFERENCES incidents(id) ON DELETE CASCADE,
+ CONSTRAINT fk_evidence_user FOREIGN KEY (uploaded_by) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS incident_comments (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ incident_id BIGINT NOT NULL,
+ author_id BIGINT NOT NULL,
+ comment TEXT NOT NULL,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_comment_incident FOREIGN KEY (incident_id) REFERENCES incidents(id) ON DELETE CASCADE,
+ CONSTRAINT fk_comment_author FOREIGN KEY (author_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS activity_logs (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT NULL,
+ action VARCHAR(120) NOT NULL,
+ entity_type VARCHAR(80),
+ entity_id BIGINT,
+ details VARCHAR(1000),
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_log_user FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+ id BIGINT AUTO_INCREMENT PRIMARY KEY,
+ user_id BIGINT NOT NULL,
+ title VARCHAR(220) NOT NULL,
+ message VARCHAR(1000) NOT NULL,
+ read_flag BOOLEAN NOT NULL DEFAULT FALSE,
+ created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+ CONSTRAINT fk_notification_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);

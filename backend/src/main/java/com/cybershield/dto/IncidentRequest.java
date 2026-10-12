@@ -1,0 +1,1 @@
+package com.cybershield.dto; import jakarta.validation.constraints.*; public record IncidentRequest(@NotBlank String title,@NotBlank String incidentType,@NotBlank String severity,@NotBlank String priority,String status,String affectedSystem,String affectedUsers,@NotBlank String description,String detectedAt,Long assigneeId){}
