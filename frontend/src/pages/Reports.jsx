@@ -32,14 +32,14 @@ export default function Reports() {
   return <div className="reportHero">
     <div className="reportIcon"><FileBarChart size={34}/></div>
     <h2>Security Reports</h2>
-    <p>Export the incident register for review, audit and offline analysis.</p>
+    <p>Export the incidents available to your account for review and offline analysis.</p>
     <button className="primary" onClick={downloadReport} disabled={loading}>
       <Download size={17}/>{loading ? 'Preparing report…' : 'Download incident CSV'}
     </button>
     {error && <div className="error" role="alert">{error}</div>}
     <div className="reportCards">
-      <div><b>Incident report</b><span>CSV export of all tracked incidents, severity, priority, status and timestamps.</span></div>
-      <div><b>Audit-ready data</b><span>Use the Activity Log screen to review accountability and investigation actions.</span></div>
+      <div><b>Incident report</b><span>CSV export of accessible incidents, including severity, priority, status and timestamps.</span></div>
+      <div><b>Audit trail</b><span>Administrators can review accountability and investigation actions in the Activity Log.</span></div>
     </div>
   </div>;
 }
